@@ -144,7 +144,7 @@ Die verbindlichen Modellanweisungen stehen in [SKILL.md](project-memory/SKILL.md
 
 ## Lizenz und Veröffentlichung
 
-Der Skill und die zugehörige Dokumentation stehen unter der [MIT-Lizenz](LICENSE). Der vollständige englische Lizenztext enthält den Copyright-Hinweis `2026 Tomm79`; die Namensangabe entspricht dem vorhandenen Git-Autorennamen.
+Der Skill und die zugehörige Dokumentation stehen unter der [MIT-Lizenz](LICENSE). Der vollständige englische Lizenztext enthält den Copyright-Hinweis `Copyright (c) 2026 Salestracks`.
 
 Die identische [Lizenzdatei im Skillunterordner](project-memory/LICENSE) wird mitinstalliert, damit der Lizenzhinweis auch bei der Verteilung allein dieses Ordners erhalten bleibt. Bei Änderungen der Copyright-Angabe werden beide Dateien gemeinsam abgeglichen. Lizenzgrundlage ist der [MIT-Standardtext der Open Source Initiative](https://opensource.org/license/mit).
 
