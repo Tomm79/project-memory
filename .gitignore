@@ -1,0 +1,14 @@
+# Nur Veröffentlichungsdateien und der Anweisungsskill werden aufgenommen.
+/*
+!/.gitignore
+!/README.md
+!/CHANGELOG.md
+!/LICENSE
+!/project-memory/
+
+# Entwicklungsdateien oder erzeugte Gedächtnisbestände gehören nicht ins Paket.
+/project-memory/*
+!/project-memory/SKILL.md
+!/project-memory/references/
+/project-memory/references/*
+!/project-memory/references/*.md
