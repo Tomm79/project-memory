@@ -4,8 +4,7 @@
 
 Erschließt und pflegt wichtige Originalstellen in Gesprächen und Dokumenten, damit spätere Chats auf dem entstandenen Projektwissen aufbauen können. Besonders sinnvoll für länger laufende Ausarbeitungen und Projekte, in denen eine gemeinsame Grundlage entwickelt, wiederholt angewendet und weiter verbessert wird.
 
-> [!TIP]
-> **Schnellstart: Installation und Einrichtung**
+> [!Schnellstart: Installation und Einrichtung]
 >
 > Den Skill einmal installieren, anschließend das Gedächtnis im gewünschten Projekt einrichten:
 >
@@ -120,8 +119,7 @@ Mehrere Chats koordinieren ihre Zugriffe auf das Gedächtnis über gemeinsame Ar
 
 Du kannst das Projektgedächtnis auf Wunsch:
 
-- **Pausieren:** Nutzung und Pflege aussetzen, Dateien und Sicherungen behalten.
-- **Deaktivieren und archivieren:** Den aktiven Bestand durch einen Hinweis ersetzen und ihn für eine spätere Wiederherstellung sichern.
+- **Deaktivieren und archivieren:** Inhalte und zugehörige Nutzungsanweisungen sichern, aus dem laufenden Projekt entfernen und einen Deaktivierungshinweis hinterlassen. Eine spätere Reaktivierung stellt das Gedächtnis wieder her.
 - **Aus dem Projekt entfernen:** Gedächtnis, zugehörige Sicherungen, Gedächtnisregeln und Pflegeautomatisierung entfernen.
 
 Diese Schritte betreffen nur das jeweilige Projekt. Die globale Skillinstallation und andere Projekte bleiben erhalten. Eine Wiederaufnahme erfolgt auf ausdrücklichen Auftrag. Einzelheiten stehen in der [Lebenszyklus-Anleitung](project-memory/references/lifecycle.md).
