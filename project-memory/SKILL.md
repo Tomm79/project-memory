@@ -1,11 +1,14 @@
 ---
 name: project-memory
 description: >-
-  Richte auf Auftrag ein lokales Projektgedächtnis ein. Nutze und pflege vorhandenes
-  project-memory während der Projektarbeit: kuratiere wichtige Originalstellen und
-  ihren Zusammenhang, erschließe relevante neue Inhalte und arbeite den Bestand bei
-  Bedarf auf. Wende dies auch an, wenn eingerichtete Projektregeln darauf verweisen.
-  Pausiere, archiviere, reaktiviere oder entferne die örtliche Einrichtung auf Auftrag.
+  Richte auf Auftrag ein Projektgedächtnis für ein Codex-Projekt mit lokalem
+  Arbeitsordner ein. Erschließe und pflege wichtige Originalstellen in Gesprächen
+  und Dokumenten, damit spätere Aufgaben auf den ursprünglichen Quellen und
+  Überlegungen aufbauen können. Besonders sinnvoll für länger laufende
+  Ausarbeitungen und wiederkehrende Arbeit mit gemeinsamen Grundlagen, etwa
+  Essays, Vertragsvorlagen, Recherchen oder Software. Nutze ein vorhandenes
+  Gedächtnis auch auf Verweis der Projektregeln. Pausiere, archiviere, reaktiviere
+  oder entferne die örtliche Einrichtung auf Auftrag.
 ---
 
 # Projektgedächtnis

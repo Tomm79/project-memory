@@ -1,8 +1,56 @@
-# project-memory: Projektgedächtnis für Codex
+# Projektgedächtnis für Codex-Projekte mit lokalem Arbeitsordner
 
-`project-memory` richtet auf ausdrücklichen Auftrag ein lokales Gedächtnis für ein Codex-Projekt ein und regelt dessen Nutzung und Pflege über mehrere Chats hinweg. Kurze Einträge erschließen wichtige Originalstellen in Projektchats und Arbeitsdateien: Was ist für die weitere Arbeit relevant, und wo findet sich der passende Zusammenhang? Das Gedächtnis soll zur Quelle führen, statt ganze Gespräche oder Ausarbeitungen nochmals zusammenzufassen.
+*Für Menschen, die mit Codex im Dialog über längere Zeit zusammenhängende Texte, Vorlagen, Konzepte oder Software entwickeln und für die nächste Aufgabe frühere Überlegungen wieder brauchen – weil der **aktuelle Arbeitsstand allein die Vorgeschichte oft nicht mehr erklärt**.*
+
+Erschließt und pflegt wichtige Originalstellen in Gesprächen und Dokumenten, damit spätere Chats auf dem entstandenen Projektwissen aufbauen können. Besonders sinnvoll für länger laufende Ausarbeitungen und Projekte, in denen eine gemeinsame Grundlage entwickelt, wiederholt angewendet und weiter verbessert wird.
+
+Eine typische Situation: „Die Ergebnisse sind vorhanden, aber für die nächste Aufgabe brauche ich auch wieder die Überlegungen dahinter.“ Vielleicht ist eine Gliederung bereits ausgearbeitet oder eine Vorlage fertig, doch für ihre Weiterentwicklung werden eine frühere Begründung, ein Einwand oder ein zurückgestellter Entwurf wieder wichtig. Kurze Gedächtniseinträge erklären, welche Originalstellen dafür relevant sind, und führen zum passenden Zusammenhang.
+
+Der Skill richtet das Gedächtnis auf ausdrücklichen Auftrag ein und regelt anschließend Aufnahme, Abruf und laufende Pflege. Auch relevante Inhalte, die noch keinen Platz in einer ausgearbeiteten Projektdokumentation gefunden haben, werden erschlossen. Das Gedächtnis soll zur Quelle führen, statt ganze Gespräche oder Ausarbeitungen nochmals zusammenzufassen.
 
 Das Gedächtnis gehört zum jeweiligen Projekt. Ein für mehrere Projekte verfügbarer Skill führt deren Inhalte nicht zusammen. Der Bestand liegt im Arbeitsordner unter `project-memory/`; die Projektanweisungen binden den Skill ein. Normale Dateiwerkzeuge und gegebenenfalls lokales Git genügen. Der Skill installiert keine Software.
+
+Der technische Skillname ist `project-memory`; mit diesem Namen wird der Skill installiert und aufgerufen. Der Anzeigename in Codex ist „Projektgedächtnis für Projekte im Dialog – mit lokalem Arbeitsordner“.
+
+## Voraussetzungen und Einsatzbereich
+
+Vorgesehene Zielumgebung ist ein Codex-Projekt mit einem dauerhaft verfügbaren lokalen Arbeitsordner, in dem Codex die Projektdateien lesen und schreiben kann. Einrichtung, Pflege, Sicherung und Zugriffskoordination verwenden diesen örtlichen Bestand. Die Projektanweisungen müssen wirksam eingebunden sein, und die gewöhnlichen Datei-/Ausführungswerkzeuge müssen die beschriebenen Operationen erlauben.
+
+Der vorhandene Chatzugang bestimmt, welche Originalgespräche tatsächlich gelesen werden können; der Skill stellt diesen Zugang selbst nicht bereit. Der regelmäßige Pflegechat benötigt zusätzlich eine passende native Automatisierungsfunktion und ausdrückliche Freigabe. Diese optionale Funktion ist keine Voraussetzung für die gewöhnliche Nutzung.
+
+Die grundlegenden Markdown- und Dateiabläufe sind nicht prinzipiell auf Codex beschränkt. Ihre vollständige Einbindung in andere Agenten, reine Chats ohne lokalen Dateizugriff oder Cloud-Arbeitsumgebungen gehört jedoch nicht zum derzeit entwickelten und erprobten Einsatzbereich. Die bisherigen Ausführungsprüfungen erfolgten unter Windows; eine praktische macOS-Erprobung steht noch aus.
+
+## Wofür eignet sich das Projektgedächtnis?
+
+Besonders hilfreich ist das Verfahren, wenn ein Ergebnis über mehrere Chats entsteht und später weiterbearbeitet oder als Grundlage für weitere Dokumente verwendet wird. Im fertigen Dokument steht häufig das Ergebnis; die Gründe, verworfenen Varianten und noch offenen Überlegungen liegen dagegen in früheren Gesprächen oder Ausarbeitungen.
+
+| Anwendungsfall | Was ein späterer Chat wiederfinden soll |
+| --- | --- |
+| Essays, Bücher und Veröffentlichungsreihen | Argumentative Absicht, frühere Gliederungen und Formulierungen sowie zurückgestellte Gedanken, an denen die nächste Überarbeitung anknüpft. |
+| Vertragsvorlagen und konkrete Verträge | Die Überlegungen hinter der Vorlage, ihre Weiterentwicklung und die Gründe für Anpassungen, die ausschließlich zu einem bestimmten Fall gehören. |
+| Angebote und Leistungsbeschreibungen | Die gemeinsame Leistungsgrundlage, ihre Abgrenzungen und die ursprünglichen Anforderungen hinter kundenspezifischen Varianten. |
+| Rechercheberichte und Konzeptbewertungen | Relevante Quellenpassagen, Gegenargumente und noch offene Interpretationen samt dem Zusammenhang ihrer bisherigen Bewertung. |
+| Schulungen und Unterrichtsmaterialien | Didaktische Gründe für Aufbau und Beispiele sowie Rückmeldungen, die eine Überarbeitung oder Zielgruppenvariante ausgelöst haben. |
+| Produkt-, Kommunikations- und Organisationskonzepte | Die Abwägungen hinter gemeinsamen Vorgaben, auf denen Website-Texte, Präsentationen, Handbücher oder weitere Ausarbeitungen aufbauen. |
+| Softwareentwicklung | Architekturentscheidungen, frühere Lösungsversuche und Einschränkungen, deren Begründung für eine spätere Änderung wichtig ist. |
+
+Ein typischer Ablauf: Eine Vorlage wird im Dialog entwickelt, in zwei unterschiedlichen Fällen angewendet und danach in einem neuen Chat überarbeitet. Das Gedächtnis erschließt die ursprünglichen Gründe und die fallbezogenen Abweichungen. Der neue Chat kann dadurch prüfen, welche Erkenntnis zur allgemeinen Vorlage gehört und welche Besonderheit nur für einen Einzelfall gilt.
+
+Die Beispiele zeigen, für welche Arbeitsmuster der Skill gedacht ist. Die bisherigen Praxisprüfungen betreffen vor allem Essayarbeit und Quellenabruf; die weiteren Anwendungsfälle sind noch zu erproben. Einzelheiten stehen unter „Prüfstand“.
+
+## Wie erschließt das Projektgedächtnis den Zusammenhang hinter den Ergebnissen?
+
+Entscheidungsjournale, Konzepte und Bewertungen halten fachliche Inhalte und häufig auch ihre Begründungen fest. Diese Dokumente können selbst die maßgeblichen Quellen sein. Das Projektgedächtnis erschließt die für eine spätere Aufgabe wichtigen Stellen darin; eine zusätzliche ausführliche Kopie der Bewertung oder des Konzepts ist dafür nicht nötig.
+
+Manchmal wird eine Überlegung wieder gebraucht, die im fertigen Ergebnis keinen Platz gefunden hat: Warum wurde eine Alternative verworfen? Welche Frage blieb offen? Galt eine Anpassung nur für einen bestimmten Fall? Wenn der passende Zusammenhang in einem früheren Gespräch oder einer weiteren Ausarbeitung liegt, führt der Gedächtniseintrag auch dorthin.
+
+Der zusätzliche Nutzen liegt in der laufenden Auswahl und Pflege dieser Zugänge über die verschiedenen Quellen hinweg. Aktuelle Arbeitsdateien bleiben die Grundlage der Ausarbeitung. Ein Eintrag kann auch einen unbestätigten Entwurf erschließen; seine Aufnahme bedeutet keine Zustimmung des Nutzers.
+
+## Wann ist der Zusatznutzen geringer?
+
+Bei kurzen Einzelaufgaben oder einem kleinen, gut gegliederten und aktuell gehaltenen Dokumentbestand reicht oft die vorhandene Dokumentation. Gedächtnisabruf, Pflege und Sicherung verursachen ebenfalls Aufwand. Je seltener frühere Gespräche oder verteilte Quellen wieder benötigt werden, desto geringer ist der erwartbare Nutzen.
+
+Wichtige Originalquellen müssen tatsächlich erreichbar sein. Der Skill nutzt vorhandene Chatzugänge; er stellt selbst keinen zusätzlichen Zugang bereit. Bei fehlendem Zugang kann ein begrenzter Originalauszug helfen. Das Verfahren bietet keine automatische Synchronisierung zwischen Rechnern und keine technisch erzwungene Projektisolierung. Weniger wiederholte Erklärung und gezieltere Suche sind Ziele; eine allgemeine Zeit- oder Tokenersparnis ist bislang nicht gemessen.
 
 ## Installation und erste Einrichtung
 
@@ -18,7 +66,7 @@ $skill-installer install https://github.com/OWNER/REPOSITORY/tree/main/project-m
 
 **`OWNER` und `REPOSITORY` sind Platzhalter.** Eine tatsächliche öffentliche Repository-Adresse steht noch nicht fest; diese Vorlage ist derzeit keine funktionierende Installationsadresse. Vor Veröffentlichung werden die Platzhalter ersetzt und der konkrete Installationsauftrag erprobt.
 
-Der Installer übernimmt den Unterordner `project-memory/` einschließlich `SKILL.md`, `references/` und `LICENSE` in den lokalen Skillbestand. README und Repository-Verwaltung werden nicht als Skillinhalt benötigt. Nach erfolgreicher Installation ist der Skill im nächsten Chat-Turn verfügbar.
+Der Installer übernimmt den Unterordner `project-memory/` einschließlich `SKILL.md`, `references/`, `agents/openai.yaml` und `LICENSE` in den lokalen Skillbestand. Die Anzeigemetadaten geben dem installierten Skill den Namen „Projektgedächtnis für Projekte im Dialog – mit lokalem Arbeitsordner“ und eine kurze Beschreibung seines Nutzens. README und Repository-Verwaltung werden nicht als Skillinhalt benötigt. Nach erfolgreicher Installation ist der Skill im nächsten Chat-Turn verfügbar.
 
 ### 2. Gedächtnis im Zielprojekt einrichten
 
@@ -48,13 +96,13 @@ Für Lebenszyklusaufträge stehen drei Optionen zur Verfügung: Pausieren erhäl
 
 Git kann die Entwicklung der eigentlichen Arbeitsdateien nachvollziehbar erhalten. Das ist auch für Essays, Konzepte, Recherchen und andere Textprojekte nützlich: Gesicherte Fassungen lassen sich vergleichen, Änderungen einem Arbeitsstand zuordnen und frühere Versionen gezielt wiederherstellen. Die Arbeit mit dem Gedächtnis ersetzt diese Versionierung der Originaldateien nicht.
 
-Wer sowohl die Arbeitsdateien als auch das Project-Memory mit Git sichern möchte, sollte den Projekt-Arbeitsordner vor der Gedächtniseinrichtung als Git-Arbeitskopie vorbereiten beziehungsweise eine bestehende Arbeitskopie verwenden. Auch die Zugehörigkeit zu einem übergeordneten Repository zählt. **Die bloße Installation der Git-Software genügt dafür nicht.** Ein Repository entsteht erst durch die Einrichtung der Versionierung oder durch Übernahme einer bestehenden Git-Arbeitskopie. [Git: Ein Repository anlegen oder übernehmen](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository).
+Wer sowohl die Arbeitsdateien als auch das Projektgedächtnis mit Git sichern möchte, sollte den Projekt-Arbeitsordner vor der Gedächtniseinrichtung als Git-Arbeitskopie vorbereiten beziehungsweise eine bestehende Arbeitskopie verwenden. Auch die Zugehörigkeit zu einem übergeordneten Repository zählt. **Die bloße Installation der Git-Software genügt dafür nicht.** Ein Repository entsteht erst durch die Einrichtung der Versionierung oder durch Übernahme einer bestehenden Git-Arbeitskopie. [Git: Ein Repository anlegen oder übernehmen](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository).
 
 Der Skill prüft den tatsächlichen Stand und richtet kein Git für den übrigen Arbeitsordner ein. Die Versionierung der Arbeitsdateien folgt dem dort vereinbarten Verfahren. Sie läuft nicht automatisch allein deshalb, weil ein Repository vorhanden ist: Gewünschte Änderungen müssen als Git-Commit gesichert werden. Originalchats werden durch Git im Arbeitsordner ebenfalls nicht automatisch gespeichert.
 
 Für die Gedächtniseinrichtung gelten diese beiden Wege:
 
-| Stand des Arbeitsordners | Sicherung des Project-Memory |
+| Stand des Arbeitsordners | Sicherung des Projektgedächtnisses |
 | --- | --- |
 | Der Arbeitsordner gehört bereits zu einer Git-Arbeitskopie. | Der Skill richtet ein eigenes, vom übrigen Projekt abgegrenztes Git in `project-memory/` ein. Git muss dafür ausführbar und für lokale Commits nutzbar sein. |
 | Der Arbeitsordner gehört zu keiner Git-Arbeitskopie. | Das Gedächtnis wird durch vollständige, geprüfte Kopien in `.project-memory-archive/` gesichert. Das gilt auch dann, wenn Git auf dem Rechner installiert ist. |
@@ -108,7 +156,7 @@ Auch ohne äußeres Git legt die Einrichtung die Ignore-Regeln vorsorglich an. W
 
 Ein Clone oder neuer Worktree des äußeren Repositorys enthält das ausgeschlossene Gedächtnis nicht automatisch. Dasselbe gilt für die Übertragung des äußeren Repositorys an einen Git-Server. Eine gewünschte Übernahme des Gedächtnisses einschließlich seiner eigenen Historie muss gesondert beauftragt und geprüft werden. Der Skill führt keinen automatischen Push aus. Beide örtlichen Sicherungsverfahren erhalten Versionen im lokalen Arbeitsumfeld; eine zusätzliche Sicherung außerhalb dieses Umfelds ist eine eigene Aufgabe.
 
-Beim vollständigen Entfernen des Project-Memory wird nur dessen örtliche Implementierung samt zugeordneten Sicherungen entfernt. Das äußere Projekt-Git, die Git-Software, ein gemeinsam verwendeter Skill und andere Projekte bleiben erhalten.
+Beim vollständigen Entfernen des Projektgedächtnisses wird nur dessen örtliche Implementierung samt zugeordneten Sicherungen entfernt. Das äußere Projekt-Git, die Git-Software, ein gemeinsam verwendeter Skill und andere Projekte bleiben erhalten.
 
 ## Aktualisierung des Skills
 
@@ -131,6 +179,8 @@ CHANGELOG.md
 project-memory/
 ├── SKILL.md
 ├── LICENSE
+├── agents/
+│   └── openai.yaml
 └── references/
     ├── setup.md
     ├── coordination.md

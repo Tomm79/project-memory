@@ -10,6 +10,9 @@
 /project-memory/*
 !/project-memory/SKILL.md
 !/project-memory/LICENSE
+!/project-memory/agents/
 !/project-memory/references/
+/project-memory/agents/*
+!/project-memory/agents/openai.yaml
 /project-memory/references/*
 !/project-memory/references/*.md
