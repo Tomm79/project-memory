@@ -18,7 +18,7 @@ $skill-installer install https://github.com/OWNER/REPOSITORY/tree/main/project-m
 
 **`OWNER` und `REPOSITORY` sind Platzhalter.** Eine tatsächliche öffentliche Repository-Adresse steht noch nicht fest; diese Vorlage ist derzeit keine funktionierende Installationsadresse. Vor Veröffentlichung werden die Platzhalter ersetzt und der konkrete Installationsauftrag erprobt.
 
-Der Installer übernimmt den Unterordner `project-memory/` einschließlich `SKILL.md` und `references/` in den lokalen Skillbestand. README und Repository-Verwaltung werden nicht als Skillinhalt benötigt. Nach erfolgreicher Installation ist der Skill im nächsten Chat-Turn verfügbar.
+Der Installer übernimmt den Unterordner `project-memory/` einschließlich `SKILL.md`, `references/` und `LICENSE` in den lokalen Skillbestand. README und Repository-Verwaltung werden nicht als Skillinhalt benötigt. Nach erfolgreicher Installation ist der Skill im nächsten Chat-Turn verfügbar.
 
 ### 2. Gedächtnis im Zielprojekt einrichten
 
@@ -126,8 +126,11 @@ Offen sind insbesondere die Ausführung unter macOS, die tatsächliche Einrichtu
 
 ```text
 README.md
+LICENSE
+CHANGELOG.md
 project-memory/
 ├── SKILL.md
+├── LICENSE
 └── references/
     ├── setup.md
     ├── coordination.md
@@ -141,4 +144,8 @@ Die verbindlichen Modellanweisungen stehen in [SKILL.md](project-memory/SKILL.md
 
 ## Lizenz und Veröffentlichung
 
-Die Lizenzentscheidung steht noch aus; diesem vorbereiteten Repository liegt derzeit keine `LICENSE` bei. Eine öffentliche Repository-Adresse und veröffentlichte Releases sind noch nicht festgelegt. Die Lizenz und der konkrete Installationsauftrag werden vor Veröffentlichung ergänzt.
+Der Skill und die zugehörige Dokumentation stehen unter der [MIT-Lizenz](LICENSE). Der vollständige englische Lizenztext enthält den Copyright-Hinweis `2026 Tomm79`; die Namensangabe entspricht dem vorhandenen Git-Autorennamen.
+
+Die identische [Lizenzdatei im Skillunterordner](project-memory/LICENSE) wird mitinstalliert, damit der Lizenzhinweis auch bei der Verteilung allein dieses Ordners erhalten bleibt. Bei Änderungen der Copyright-Angabe werden beide Dateien gemeinsam abgeglichen. Lizenzgrundlage ist der [MIT-Standardtext der Open Source Initiative](https://opensource.org/license/mit).
+
+Eine öffentliche Repository-Adresse und veröffentlichte Releases sind noch nicht festgelegt. Der konkrete Installationsauftrag wird vor Veröffentlichung ergänzt und erprobt.
