@@ -4,7 +4,8 @@
 
 Erschließt und pflegt wichtige Originalstellen in Gesprächen und Dokumenten, damit spätere Chats auf dem entstandenen Projektwissen aufbauen können. Besonders sinnvoll für länger laufende Ausarbeitungen und Projekte, in denen eine gemeinsame Grundlage entwickelt, wiederholt angewendet und weiter verbessert wird.
 
-> [!Schnellstart: Installation und Einrichtung]
+> [!TIP]
+> **Schnellstart: Installation und Einrichtung**
 >
 > Den Skill einmal installieren, anschließend das Gedächtnis im gewünschten Projekt einrichten:
 >
