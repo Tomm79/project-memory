@@ -44,43 +44,102 @@ Ein harter Abbruch kann einen Marker und ein teilweise ausgeführtes Paket zurü
 
 ## Gewöhnliche Operationen unter Windows und macOS
 
-Die folgenden Bausteine zeigen die exklusive Operation und die Eigentümerfreigabe. Verbinde sie im Normalfall mit dem vorbereiteten Zugriff in einem Aufruf nach dem vorstehenden Paketablauf; die alleinige `acquired`-Ausgabe ist kein abgeschlossener Gedächtniszugriff. Setze die Variablen aus der bereits geprüften tatsächlichen Projektwurzel und erhalte die eigene Besitzerkennung für den Abschluss. Typ- und Pfadprüfung, begrenzte Wiederholung und Fehlerabschluss aus den Abschnitten oben gelten weiterhin. Speichere dafür kein dauerhaftes Hilfsprogramm im Zielprojekt.
+Die Windows-Vorlage bildet einen vollständigen gewöhnlichen Leseabruf ab. Die macOS-Bausteine zeigen die exklusiven Operationen; dort gelten weiterhin die Paketregeln oben. Verwende die vorhandene Plattform, ohne zusätzliche Laufzeit oder dauerhaftes Hilfsprogramm im Zielprojekt. Ein neuer Interpreter oder eine andere Löschsyntax ist kein belegter Behelf gegen einen Freigabedialog.
 
 Lies und schreibe Marker und Gedächtnis-Markdown als UTF-8. Bei Windows PowerShell 5.1 muss die Kodierung ausdrücklich gesetzt werden, etwa durch `Get-Content -Encoding UTF8` oder `IO.File.ReadAllText` mit UTF-8; sonst können Umlaute bei aufeinanderfolgenden Änderungen beschädigt werden.
 
-### Windows mit vorhandener PowerShell
+### Windows: vollständige Abrufvorlage
 
-Einzelner Erwerb, nachdem der feste Pfad und ein gegebenenfalls vorhandener Marker geprüft wurden:
+Führe die folgende Vorlage in der bereits zugeordneten tatsächlichen Projektwurzel aus. Passe für gewöhnliche Abrufe nur den kurzen Anlass `memoryPurpose` und die Liste `memoryEntryFiles` an. Die Liste enthält direkte Dateinamen aus `project-memory/entries/`, keine Verzeichnisse oder anderen Pfade. Die Vorlage gehört als Text in den gewöhnlichen Werkzeugaufruf und wird nicht als Programm im Zielprojekt eingerichtet.
+
+Beim ersten Orientierungsschritt bleibt die Eintragsliste leer: Profil und Index werden gemeinsam gelesen und die Reservierung freigegeben. Wähle danach anhand des Index die benötigten Einträge. Für deren Abruf verwende dieselbe Vorlage erneut mit beispielsweise `@('E-0002-writing-workshop.md')`; sie liest Profil, Index und genau diese Dateien gemeinsam. Kopiere keine Platzhalterdateinamen ungeprüft. Originalchatabfragen und fachliche Arbeit folgen nach Freigabe. Ein zusätzlicher Suchabruf verwendet dieselben Reservierungsregeln und eine auf den aktiven Eintragsordner begrenzte Suche.
+
+Behalte exklusiven Erwerb, Markerartprüfung, begrenztes Warten, UTF-8 und Eigentümerfreigabe bei. Die Vorlage enthält die bisher vereinbarten fünf Sekunden beziehungsweise höchstens 30 Sekunden; eine zweite Wartephase folgt nur der Regel „Belegt, warten und erneut versuchen“. Sie ist ausschließlich für Lesen bestimmt: Ein Schreibpaket braucht den konsistenzabhängigen Fehlerabschluss oben und darf nicht durch bloßen Austausch des Leseabschnitts daraus entstehen.
 
 ```powershell
 $ErrorActionPreference = 'Stop'
+$memoryProjectRoot = (Get-Location).ProviderPath
+$memoryPurpose = 'Projektgedächtnis abrufen'
+$memoryEntryFiles = @()
+
+$memoryRoot = Join-Path $memoryProjectRoot 'project-memory'
 $memoryLockPath = Join-Path $memoryProjectRoot '.project-memory.lock'
 $memoryOwnerToken = [guid]::NewGuid().ToString('D')
-$memoryStream = [IO.File]::Open($memoryLockPath, [IO.FileMode]::CreateNew,
-    [IO.FileAccess]::Write, [IO.FileShare]::None)
+$memoryInvalidAttributes = [IO.FileAttributes]::Directory -bor [IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Device
+$memoryReadPaths = @((Join-Path $memoryRoot 'PROFILE.md'), (Join-Path $memoryRoot 'INDEX.md'))
+foreach ($memoryEntryName in $memoryEntryFiles) {
+    if ($memoryEntryName -in @('', '.', '..') -or
+        [IO.Path]::GetFileName($memoryEntryName) -cne $memoryEntryName -or
+        $memoryEntryName.IndexOfAny([IO.Path]::GetInvalidFileNameChars()) -ge 0) {
+        throw 'Für einen Eintrag ist ein direkter Dateiname erforderlich.'
+    }
+    $memoryReadPaths += Join-Path (Join-Path $memoryRoot 'entries') $memoryEntryName
+}
+
+$memoryStream = $null
+$memoryLabelled = $false
 try {
+    for ($memoryAttempt = 0; $memoryAttempt -le 6; $memoryAttempt++) {
+        try {
+            $memoryAttributes = [IO.File]::GetAttributes($memoryLockPath)
+            if (($memoryAttributes -band $memoryInvalidAttributes) -ne 0) {
+                throw 'Der Reservierungsmarker ist keine reguläre Datei.'
+            }
+        } catch [IO.FileNotFoundException] { }
+        try {
+            $memoryStream = [IO.File]::Open($memoryLockPath, [IO.FileMode]::CreateNew,
+                [IO.FileAccess]::Write, [IO.FileShare]::None)
+            break
+        } catch [IO.IOException] {
+            if (($_.Exception.HResult -band 65535) -notin @(80, 183)) { throw }
+            if ($memoryAttempt -eq 6) { throw 'Die Gedächtnisreservierung bleibt belegt.' }
+            Start-Sleep -Seconds 5
+        }
+    }
     $memoryPayload = "owner_token: $memoryOwnerToken`ncreated_at: $([DateTime]::UtcNow.ToString('o'))`npurpose: $memoryPurpose`n"
     $memoryBytes = [Text.Encoding]::UTF8.GetBytes($memoryPayload)
     $memoryStream.Write($memoryBytes, 0, $memoryBytes.Length)
     $memoryStream.Flush()
-} finally {
+    $memoryLabelled = $true
     $memoryStream.Dispose()
+
+    $memoryNotice = Join-Path $memoryRoot 'README.md'
+    if (Test-Path -LiteralPath $memoryNotice) {
+        [IO.File]::ReadAllText($memoryNotice, [Text.Encoding]::UTF8)
+        throw 'Deaktivierungshinweis vorhanden; der Gedächtnisabruf endet.'
+    }
+    foreach ($memoryRequired in @('PROFILE.md', 'INDEX.md')) {
+        if (-not (Test-Path -LiteralPath (Join-Path $memoryRoot $memoryRequired) -PathType Leaf)) {
+            throw 'Profil oder Index fehlt; keinen Ersatzbestand anlegen.'
+        }
+    }
+    foreach ($memoryReadPath in $memoryReadPaths) {
+        Write-Output "FILE: $memoryReadPath"
+        [IO.File]::ReadAllText($memoryReadPath, [Text.Encoding]::UTF8)
+    }
+} finally {
+    if ($null -ne $memoryStream) {
+        $memoryStream.Dispose()
+        if (-not $memoryLabelled) {
+            Write-Warning "Markerbeschriftung fehlgeschlagen; Reservierung unter $memoryLockPath (owner_token: $memoryOwnerToken) vor einem Wiederanlauf klären."
+        } else {
+            $memoryAttributes = [IO.File]::GetAttributes($memoryLockPath)
+            if (($memoryAttributes -band $memoryInvalidAttributes) -ne 0) {
+                throw 'Der Reservierungsmarker ist vor Freigabe keine reguläre Datei.'
+            }
+            $memoryRecordedOwner = Get-Content -LiteralPath $memoryLockPath -Encoding UTF8 -TotalCount 1
+            if ($memoryRecordedOwner -cne "owner_token: $memoryOwnerToken") {
+                throw 'Die Reservierung gehört nicht mehr zu diesem Vorgang.'
+            }
+            Remove-Item -LiteralPath $memoryLockPath
+        }
+    }
 }
-[pscustomobject]@{ status = 'acquired'; owner_token = $memoryOwnerToken }
 ```
 
-Nur eine tatsächlich erkannte Dateiexistenz-Kollision wird als belegt behandelt. Unter Windows kennzeichnen bei dieser Operation die unteren 16 Bits von `IOException.HResult` mit 80 oder 183 die entsprechenden Existenzfehler. Andere Fehler anhalten und konkret einordnen. Eine bereits durchgeführte Erstellung mit anschließendem Schreibfehler ist kein erfolgloser Erwerb wegen Belegung.
+Nur eine tatsächlich erkannte Dateiexistenz-Kollision wird als belegt behandelt. Unter Windows kennzeichnen die unteren 16 Bits von `IOException.HResult` mit 80 oder 183 diese Existenzfehler. Die erneute Markerartprüfung beim nächsten Versuch unterscheidet eine reguläre Belegung von einem ungeklärten Markertyp. Ein nach der Typprüfung verschwundener Marker verhindert den exklusiven Erwerb nicht; andere Attribut-, Pfad- oder Rechtefehler werden nicht als gewöhnliche Belegung verschluckt.
 
-Freigabe nach erneuter fester Pfad- und Typprüfung:
-
-```powershell
-$ErrorActionPreference = 'Stop'
-$memoryRecordedOwner = Get-Content -LiteralPath $memoryLockPath -Encoding UTF8 -TotalCount 1
-if ($memoryRecordedOwner -cne "owner_token: $memoryOwnerToken") {
-    throw 'Die Reservierung gehört nicht mehr zu diesem Vorgang.'
-}
-Remove-Item -LiteralPath $memoryLockPath
-```
+Bei reinem Lesefehler oder Stop wegen Deaktivierung beziehungsweise fehlendem Bestand wird die erfolgreich beschriftete eigene Reservierung im selben Aufruf freigegeben. Scheitert dagegen die Beschriftung, findet keine Inhaltslektüre statt: Die Vorlage erhält den selbst erzeugten Marker als ungeklärten Abbruch, weil noch kein verlässlicher Besitzertext für die normale Freigabe vorliegt. Kläre ihn nach „Abschluss, Fehler und Abbruch“; keine automatische Entfernung eines unklaren Markers. Die Vorlage ist keine Aktivierungs- oder Profilparserprüfung: Kennzeichnung, Projektzuordnung und Quellenwahl prüft das Modell nach dem Abruf.
 
 ### macOS mit vorhandener `/bin/sh`
 
@@ -110,4 +169,4 @@ rm "$memory_lock_path"
 
 `set -C` muss vor der geschützten Umleitung in derselben Shell gelten. Ein außerhalb der Klammern platzierter Umleitungsoperator würde den dort gesetzten Schutz nicht nutzen. Die konkrete macOS-Ausführung bleibt im Zielsystem zu prüfen; ein Windows-Versuch belegt sie nicht.
 
-Primärbelege: [Microsoft: FileMode.CreateNew](https://learn.microsoft.com/en-us/dotnet/api/system.io.filemode), [Microsoft: Systemfehler 80 und 183](https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-), [Apple: Shell-Umleitung](https://github.com/apple-oss-distributions/shell_cmds/blob/main/sh/redir.c), [POSIX: Shell-Ausgabeumleitung](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07_02).
+Primärbelege: [Microsoft: FileMode.CreateNew](https://learn.microsoft.com/en-us/dotnet/api/system.io.filemode), [Microsoft: File.GetAttributes](https://learn.microsoft.com/en-us/dotnet/api/system.io.file.getattributes), [Microsoft: Systemfehler 80 und 183](https://learn.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-), [Apple: Shell-Umleitung](https://github.com/apple-oss-distributions/shell_cmds/blob/main/sh/redir.c), [POSIX: Shell-Ausgabeumleitung](https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_07_02).
