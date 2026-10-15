@@ -24,11 +24,89 @@ Bei unverändert gesichertem Ausgangsbestand genügt normalerweise ein Ergebnisc
 
 Kopiere ausschließlich den gesamten aktiven Gedächtnisbestand einschließlich Profil, Index, Einträgen und versteckten zugehörigen Dateien in einen neuen eindeutig datierten, nicht bereits belegten Unterordner von .project-memory-archive. Alte Sicherungen werden nicht mitkopiert oder überschrieben. Originalquellen außerhalb des Gedächtnisses gehören nicht automatisch dazu.
 
-Erfasse relative Dateipfade und Dateiinhalt beziehungsweise Hashwerte des aktuellen Ausgangsbestands, kopiere und vergleiche die Kopie technisch damit. Prüfe außerdem, dass der aktive Bestand während der Erstellung nicht auseinanderlief. Bei erkennbaren Änderungen, fehlenden Dateien oder ungeklärter Vollständigkeit ist die Kopie noch keine geprüfte Sicherung. Gib keine Archivtexte als Kontext aus.
+Erfasse relative Verzeichnis- und Dateipfade sowie Dateiinhalt beziehungsweise Hashwerte des aktuellen Ausgangsbestands. Leere Verzeichnisse gehören zum Vergleich. Lege im neuen Ziel zuerst die Verzeichnisse an, kopiere danach die Dateien und vergleiche die vollständige Zielmenge mit dem Ausgang. Prüfe außerdem, dass der aktive Bestand während der Erstellung nicht auseinanderlief. Bei erkennbaren Änderungen, fehlenden Dateien oder ungeklärter Vollständigkeit ist die Kopie noch keine geprüfte Sicherung. Technisches Inventar, Vergleiche und Schlussprüfung gehören in dieselbe Reservierung wie das Paket; gib keine Archivtexte als Kontext aus.
 
 Kennzeichne eine erfolgreich geprüfte Generation durch einen nachvollziehbaren datierten Ordnernamen, etwa 20261012T140000000Z-verified. Ein neues Ziel bleibt bis zur erfolgreichen Prüfung ohne verified-Kennzeichnung; erst danach wird es entsprechend benannt. Der Name dokumentiert die erfolgte Prüfung, ersetzt sie nicht. Bereits passend gekennzeichnete geprüfte Bestände werden nicht allein für diese Namensform umbenannt. Ältere Kopien ohne belegbaren Prüfstand sind kein Anlass, ihren Inhalt als normale Quelle zu lesen.
 
 Vor einer neuen Kopie kann der technische Pfad-/Inhaltsvergleich mit einer vorhandenen geprüften Kopie feststellen, dass der aktuelle Stand bereits gesichert ist. Bei Übereinstimmung genügt diese Kopie. Original- oder Archivtext wird dafür nicht in den Gesprächskontext ausgegeben.
+
+### Windows: Kopieren und vollständig vergleichen
+
+Dieser Baustein gehört in das bereits reservierte Schreib- oder Lebenszykluspaket nach coordination.md. Er installiert keine Datei oder Laufzeit. Vorher sind `memoryRoot`, die tatsächliche `memoryArchiveRoot` und die zwei neuen direkten Unterordner `memoryPendingPath` beziehungsweise `memoryVerifiedPath` absolut zuzuordnen; Archivwurzel und alle übergeordneten Zielpfade dürfen keine Reparse Points enthalten. Bei unerwarteter eigener Git-Verwaltung im Kopienbestand zuerst die Verfahrenszuordnung klären. Die Quell- und Zielmenge ist vor jeder aktiven Ersetzung vorzubereiten; dies ist keine Wiederherstellungsvorlage.
+
+Setze die Eingabe `memoryRuleArchiveText` vor dem Baustein bei normalen Sicherungen ausdrücklich auf `$null`. Nur bei ausdrücklich beauftragter Archivierung enthält sie stattdessen den vollständig vorbereiteten technischen Text für `PROJECT_RULES.md` nach lifecycle.md. Der Baustein überschreibt diese Eingabe nicht. Eine vorhandene gleichnamige Quelldatei verhindert die Ergänzung. Verwende für jede neue Kopie neue Namen; ein vorhandenes pending-Ziel verlangt den geregelten Wiederanlauf, kein Überschreiben.
+
+```powershell
+# Pfade, memoryRuleArchiveText und eigene Reservierung sind bereits vorbereitet.
+$ErrorActionPreference = 'Stop'
+$memoryInventory = {
+    param([string]$memoryPath)
+    $memoryBase = [IO.Path]::GetFullPath($memoryPath).TrimEnd([char[]]'\/')
+    $memoryQueue = [Collections.Generic.Queue[string]]::new()
+    $memoryQueue.Enqueue($memoryBase)
+    $memoryRows = @()
+    while ($memoryQueue.Count -gt 0) {
+        $memoryDirectory = $memoryQueue.Dequeue()
+        if (([IO.File]::GetAttributes($memoryDirectory) -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw 'Pfadumleitung im Sicherungsbestand.'
+        }
+        foreach ($memoryItem in Get-ChildItem -LiteralPath $memoryDirectory -Force) {
+            if (($memoryItem.Attributes -band ([IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Device)) -ne 0) {
+                throw 'Pfadumleitung oder Sonderdatei im Sicherungsbestand.'
+            }
+            $memoryRelative = $memoryItem.FullName.Substring($memoryBase.Length + 1)
+            $memoryHash = ''
+            $memoryKind = 'directory'
+            if ($memoryItem.PSIsContainer) { $memoryQueue.Enqueue($memoryItem.FullName) }
+            else {
+                $memoryKind = 'file'
+                $memoryHash = (Get-FileHash -LiteralPath $memoryItem.FullName -Algorithm SHA256).Hash
+            }
+            $memoryRows += [pscustomobject]@{path=$memoryRelative; kind=$memoryKind; hash=$memoryHash}
+        }
+    }
+    $memoryRows | Sort-Object path
+}
+$memoryArchiveRoot = [IO.Path]::GetFullPath($memoryArchiveRoot).TrimEnd([char[]]'\/')
+foreach ($memoryNewPath in @($memoryPendingPath, $memoryVerifiedPath)) {
+    if ([IO.Path]::GetDirectoryName([IO.Path]::GetFullPath($memoryNewPath)) -cne $memoryArchiveRoot -or
+        (Test-Path -LiteralPath $memoryNewPath)) { throw 'Sicherungsziel ist nicht neu und direkt zugeordnet.' }
+}
+if ([IO.Path]::GetFullPath($memoryPendingPath) -ceq [IO.Path]::GetFullPath($memoryVerifiedPath)) {
+    throw 'Vorläufiges und geprüftes Ziel müssen verschieden sein.'
+}
+$memoryBefore = @(& $memoryInventory $memoryRoot)
+$memoryExpected = @($memoryBefore)
+if ($null -ne $memoryRuleArchiveText -and @($memoryBefore | Where-Object path -eq 'PROJECT_RULES.md').Count -gt 0) {
+    throw 'Vorhandenes PROJECT_RULES.md nicht überschreiben.'
+}
+[void][IO.Directory]::CreateDirectory($memoryPendingPath)
+foreach ($memoryRow in @($memoryBefore | Where-Object kind -eq 'directory' | Sort-Object {$_.path.Length})) {
+    [void][IO.Directory]::CreateDirectory((Join-Path $memoryPendingPath $memoryRow.path))
+}
+foreach ($memoryRow in @($memoryBefore | Where-Object kind -eq 'file')) {
+    [IO.File]::Copy((Join-Path $memoryRoot $memoryRow.path), (Join-Path $memoryPendingPath $memoryRow.path), $false)
+}
+if ($null -ne $memoryRuleArchiveText) {
+    $memoryRuleBytes = [Text.UTF8Encoding]::new($false).GetBytes($memoryRuleArchiveText)
+    [IO.File]::WriteAllBytes((Join-Path $memoryPendingPath 'PROJECT_RULES.md'), $memoryRuleBytes)
+    $memoryHasher = [Security.Cryptography.SHA256]::Create()
+    try { $memoryRuleHash = [BitConverter]::ToString($memoryHasher.ComputeHash($memoryRuleBytes)).Replace('-', '') }
+    finally { $memoryHasher.Dispose() }
+    $memoryExpected += [pscustomobject]@{path='PROJECT_RULES.md'; kind='file'; hash=$memoryRuleHash}
+}
+$memoryExpectedJson = ConvertTo-Json -InputObject @($memoryExpected | Sort-Object path) -Compress
+$memoryCopyJson = ConvertTo-Json -InputObject @(& $memoryInventory $memoryPendingPath) -Compress
+$memoryAfterJson = ConvertTo-Json -InputObject @(& $memoryInventory $memoryRoot) -Compress
+$memoryBeforeJson = ConvertTo-Json -InputObject $memoryBefore -Compress
+if ($memoryCopyJson -cne $memoryExpectedJson -or $memoryAfterJson -cne $memoryBeforeJson) {
+    throw 'Kopie unvollständig oder Quelle inzwischen verändert; nicht verified nennen.'
+}
+[IO.Directory]::Move($memoryPendingPath, $memoryVerifiedPath)
+Write-Output "Geprüfte Sicherung: $memoryVerifiedPath"
+```
+
+Erwerb, Eigentümerprüfung vor Schreibschritten und konsistenzabhängiger Abschluss bleiben Aufgabe des umschließenden Pakets. Bei Fehler bleibt die unvollständige Kopie ungeprüft erhalten; kein automatisches Löschen oder Weiterbereinigen. Ein Wiederanlauf prüft ihre Herkunft und gesamten tatsächlichen Inhalt neu. Der Baustein vergleicht technische Mengen und Bytes, nicht die fachliche Richtigkeit der Einträge.
 
 ## Aufbewahrung von Kopien
 
@@ -46,7 +124,20 @@ Bei einer bestehenden Einrichtung ohne entsprechende Freigabe erhältst du deren
 
 ## Technische Bereinigung
 
-Bereinige erst nach erfolgreich erstellter und geprüfter neuer Kopie, niemals als Voraussetzung, um eine fehlgeschlagene Sicherung doch noch zu ermöglichen. Wähle die zu erhaltende Menge und die eindeutig überzähligen Kandidaten anhand zugeordneter Namen, Zeitpunkte und technischer Prüfergebnisse. Prüfe ältere Generationen anhand ihres eigenen belegten Sicherungsstands; Unterschiede zum aktuellen Bestand sind erwartbar und verhindern allein keine Bereinigung. Ordner, deren Zuordnung zum Projekt, Prüfstand oder bisheriger Schutz unklar ist, bleiben erhalten; sie werden nicht einfach in die normalen Generationen eingerechnet. Unvollständige oder fremde Ordner werden nicht durch diese Regel entsorgt.
+Bereinige erst nach erfolgreich erstellter und geprüfter neuer Kopie, niemals als Voraussetzung, um eine fehlgeschlagene Sicherung doch noch zu ermöglichen. Bestimme unter derselben Reservierung zuerst die vollständig zugeordneten geprüften Generationen. Aus ihnen wird die Erhaltungsmenge als **Vereinigung** gebildet: die jüngsten im Profil freigegebenen N Generationen, alle dort benannten geschützten Rückkehrpunkte sowie die noch benötigten Quell-, Deaktivierungs- und Übergangsstände. Ziehe diese gesamte Menge von den zugeordneten geprüften Generationen ab; nur der Rest kommt überhaupt als Löschkandidat infrage. Das gilt auch bei Wiederanlauf und in verkürzten Bereinigungszweigen. Ein alleiniger Sortier-/Skip-Schritt nach N reicht nicht.
+
+Prüfe ältere Generationen anhand ihres eigenen belegten Sicherungsstands; Unterschiede zum aktuellen Bestand sind erwartbar und verhindern allein keine Bereinigung. Ordner, deren Zuordnung zum Projekt, Prüfstand oder bisheriger Schutz unklar ist, bleiben außerhalb der Kandidatenmenge erhalten und werden nicht einfach in die normalen Generationen eingerechnet. Unvollständige oder fremde Ordner werden nicht durch diese Regel entsorgt. Das Fehlen einer UUID bei einer Altgeneration beweist weder fremde noch eigene Herkunft; eine andere konkrete Zuordnung muss vor einer Löschung belegt sein.
+
+Für die bisher gezeigten Namen lautet das Zeitformat `yyyyMMddTHHmmssfffZ`: Nach dem `T` stehen neun Ziffern, etwa in `20261012T140000000Z-verified`. Eine passende Namenprüfung ist `^\d{8}T\d{9}Z-verified$`; sie beweist weder Zuordnung noch erfolgte Prüfung. Anders benannte ältere zugehörige Sicherungen werden nicht umbenannt oder pauschal ausgeschlossen. Ein unbekannter Ordner wird vor dem Zugriff auf erwartete Profildateien ausgesondert, statt den gesamten Vergleich an dessen fehlendem Profil scheitern zu lassen.
+
+Der folgende reine Auswahlbaustein wird erst mit technisch zugeordneten geprüften Generationen in belegter Reihenfolge vom neuesten zum ältesten verwendet (`memoryVerifiedNewestFirst`). `memoryGenerationLimit`, `memoryReturnPointNames` und `memoryTransitionNames` stammen aus der konkret freigegebenen Regel und dem aktuellen Übergang. Das sind kurzlebige Variablen, keine neuen Metadaten. Der Baustein löscht nichts; die anschließenden Zielprüfungen bleiben erforderlich.
+
+```powershell
+if ($memoryGenerationLimit -lt 1) { throw 'Ungültige freigegebene Generationenzahl.' }
+$memoryKeepNames = @($memoryVerifiedNewestFirst | Select-Object -First $memoryGenerationLimit | ForEach-Object Name)
+$memoryKeepNames = @($memoryKeepNames + @($memoryReturnPointNames) + @($memoryTransitionNames) | Sort-Object -Unique)
+$memoryDeleteCandidates = @($memoryVerifiedNewestFirst | Where-Object { $_.Name -notin $memoryKeepNames })
+```
 
 Vor jeder Löschung prüfe den aktuellen Stand und folgende Grenzen:
 
