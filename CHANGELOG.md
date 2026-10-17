@@ -2,6 +2,9 @@
 
 ## Noch nicht veröffentlicht
 
+- Neue Originalzugänge werden an einem gemeinsamen Kontrollpunkt geprüft; offene Ausarbeitungen bleiben auch bei einer benannten Zugangslücke auffindbar.
+- Selektiver Einstieg und eine gemeinsame Windows-Schreibhülle mit ursprünglichem Erwerbsnachweis und kontrolliertem Fehlerabschluss. Eigene technische Restkopien werden gezielt bereinigt.
+- Einrichtung und Reaktivierung prüfen die tatsächlich gespeicherten Regeln und Pfade. Vollständige Entfernung umfasst auch später ergänzte eigene Memoryregeln; fremde Projektregeln bleiben erhalten.
 - Erster vorbereiteter Veröffentlichungsstand des Skills `project-memory` mit Einrichtung, Quellenkuratierung und Pflege.
 - Getrennte Sicherung mit eigenem Gedächtnis-Git oder vollständigen geprüften Kopien.
 - Kooperative Zugriffskoordination sowie Deaktivieren und Archivieren, Reaktivieren und vollständige örtliche Entfernung.

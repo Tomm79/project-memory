@@ -9,7 +9,7 @@ Der Skill ist für Projekte gedacht, die mit der ChatGPT-Desktop-App im Work- od
 > [!TIP]
 > **Schnellstart: Installation und Einrichtung**
 >
-> **Modell wählen:** Für Einrichtung, laufende Nutzung und Pflege ist **GPT-6.1 Sol mit Denkaufwand `high`** empfohlen. GPT-6 Luna mit `high` ist noch in Erprobung; eine Mindestkonfiguration ist noch nicht freigegeben.
+> **Modell wählen:** Für Einrichtung, laufende Nutzung und Pflege ist **GPT-6.1 Sol mit Denkaufwand `high`** empfohlen.
 >
 > Den Skill einmal installieren, anschließend das Gedächtnis im gewünschten Projekt einrichten. Verwende jeweils den Befehl für deinen Modus:
 >
@@ -61,7 +61,7 @@ Für den Betrieb gelten folgende Voraussetzungen und Empfehlungen:
 | Projekt | Ein [lokales Projekt](https://learn.chatgpt.com/docs/projects) mit dauerhaft verfügbarem Arbeitsordner, in dem du Work oder Codex nutzt. |
 | Zugriffsrechte | ChatGPT muss die Projektdateien lesen und bearbeiten, gewöhnliche lokale Dateioperationen ausführen und die Projektanweisungen in `AGENTS.md` verwenden können. |
 | Betriebssystem | Windows mit lokalem Work und Codex ist praktisch erprobt. Die macOS-Erprobung steht noch aus. |
-| Modell und Denkaufwand | **Empfohlen und praktisch erprobt: GPT-6.1 Sol mit Denkaufwand `high`.** GPT-6 Luna mit `high` ist noch in Erprobung. Die Empfehlung gilt für Einrichtung, laufende Nutzung und Pflege. |
+| Modell und Denkaufwand | **Empfohlen und praktisch erprobt: GPT-6.1 Sol mit Denkaufwand `high`.** Die Empfehlung gilt für Einrichtung, laufende Nutzung und Pflege. |
 | Git – optional | Ohne Git im Arbeitsordner werden Kopiensicherungen verwendet. Ist der Arbeitsordner bereits mit Git versioniert, muss Git für lokale Sicherungscommits nutzbar sein. [Details zur Git-Nutzung](#git-im-projekt-arbeitsordner). |
 | Originalquellen | Dokumente und frühere Chats müssen im jeweiligen Projektchat erreichbar sein. Der Skill nutzt vorhandene Chatzugänge; bei fehlendem Zugang kann ein begrenzter Originalauszug die benötigte Stelle erhalten. |
 | Regelmäßiger Check – optional | Benötigt eine verfügbare Automatisierungsfunktion für einen eigenen lokalen Projektchat und deine Freigabe. Für [lokale automatische Läufe](https://learn.chatgpt.com/docs/automations?surface=app) müssen Rechner und App laufen. Die gewöhnliche Nutzung funktioniert auch ohne diesen Check. |
@@ -100,7 +100,7 @@ Wichtige Originalquellen müssen tatsächlich erreichbar sein. Der Skill nutzt v
 
 ## Installation und erste Einrichtung
 
-**Modell für Einrichtung, laufende Nutzung und Pflege:** Empfohlen ist **GPT-6.1 Sol mit Denkaufwand `high`**. GPT-6 Luna mit `high` ist noch in Erprobung; eine Mindestkonfiguration ist noch nicht freigegeben. Wähle das Modell vor dem ersten Auftrag und beachte die Empfehlung auch in späteren Projektchats und Pflegeaufträgen.
+**Modell für Einrichtung, laufende Nutzung und Pflege:** Empfohlen ist **GPT-6.1 Sol mit Denkaufwand `high`**. Wähle das Modell vor dem ersten Auftrag und beachte die Empfehlung auch in späteren Projektchats und Pflegeaufträgen.
 
 Die Installation macht den Skill für lokale Projektchats in der ChatGPT-Desktop-App verfügbar; seine Nutzung ist in Work und Codex erprobt. Erst ein weiterer Auftrag richtet das Gedächtnis in einem bestimmten Projekt ein. Eine Installation allein verändert keine Projekt-Arbeitsordner und führt keine Projektinhalte zusammen.
 

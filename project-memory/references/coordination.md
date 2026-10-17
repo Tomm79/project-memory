@@ -1,6 +1,6 @@
 # Kooperative Zugriffskoordination
 
-Lies diese Referenz vor dem ersten Zugriff auf ein vorhandenes Gedächtnis und vor Einrichtung, Fortschreibung, Sicherung, Wiederherstellung oder Archivbereinigung. Alle Chats, Pflegechats und Subagenten am selben örtlichen Bestand verwenden dieses Verfahren. Es koordiniert regelkonforme Zugriffe; gewöhnliche Schreibrechte anderer Programme oder eines abweichenden Chats bleiben bestehen. Ein Änderungspaket wird dadurch nicht zu einer absturzsicheren Transaktion.
+Lies die gemeinsamen Regeln und die passende Plattformvorlage beim ersten entsprechenden Zugriff. Verwende beim weiteren normalen Abruf dieselbe Lesevorlage, beim Schreiben den Abschnitt „Windows: Schreibpaket und Wiederanlauf“ zusammen mit backup.md. Bereits gelesene unveränderte Teile müssen nicht bei jedem Paket erneut vollständig ausgegeben werden. Einrichtung und Lebenszyklus ergänzen ihre eigenen Abläufe. Alle Chats, Pflegechats und Subagenten am selben örtlichen Bestand verwenden dieses Verfahren. Es koordiniert regelkonforme Zugriffe; gewöhnliche Schreibrechte anderer Programme oder eines abweichenden Chats bleiben bestehen. Ein Änderungspaket wird dadurch nicht zu einer absturzsicheren Transaktion.
 
 ## Gemeinsame Reservierung
 
@@ -15,6 +15,8 @@ Ein vorhandener leerer, unlesbarer oder unvollständig beschrifteter Marker gilt
 Eine Reservierung erlaubt keine Auffüllung eines absichtlich archivierten oder fehlenden Bestands. Ein Deaktivierungshinweis oder fehlendes Profil beziehungsweise fehlender Index beendet den regulären Zugriff; gib die eigene Reservierung kontrolliert frei. Ein einzelner defekter Eintragsverweis ist davon zu unterscheiden: Sind Profil und Index vorhanden, suche unter derselben kurzen Reservierung begrenzt im aktiven Eintragsordner nach bekannter Kennung oder passendem Titel. Prüfe Kennzeichnung und Projektzuordnung des Treffers. Ein eindeutig falscher Verweis darf nach Sicherung repariert werden; fehlende oder widersprüchliche Treffer bleiben eine konkrete Lücke. Keine Ersatzanlage, Rekonstruktion oder Archivlektüre als Quelle. Vor Deaktivierung, Reaktivierung oder Entfernung müssen alle anderen Projektchats und Schreiboperationen abgeschlossen sein. Ausdrücklich beauftragte technische Archivzugriffe folgen lifecycle.md beziehungsweise restore.md.
 
 Bündele im Normalfall Erwerb, die vorbereiteten Dateioperationen und die konsistenzabhängige Freigabe in einem gewöhnlichen Datei-/Shellaufruf. Halte den Marker möglichst nicht über weitere Modellrunden oder Werkzeugfreigaben hinweg. Für die Eintragsauswahl kannst du zunächst Profil und Index gemeinsam lesen und freigeben; lies beim danach gezielt reservierten Abruf Profil, Index und gewählte Einträge nochmals zusammen. Das verbindet einen konsistenten Abruf mit kurzer Reservierung. Eine nur vorab angelegte Datei, deren Freigabe erst ein späterer Werkzeugaufruf ausführt, kann andere Chats während dessen Blockade unnötig aussperren.
+
+Vermeide überlange neu zusammengesetzte Windows-Aufrufe. Bei einem umfangreichen vorbereiteten Paket kann dessen gewöhnlicher Aufruf stattdessen eine eindeutig eigene temporäre `.ps1`-Datei ausführen. Lege sie vor dem Erwerb an und rufe sie über ihren geprüften Pfad auf; keine Installation, zusätzliche Laufzeit oder Umgehung der Befehlsprüfung. Entferne eigene temporäre Skripte und Dateipuffer nach dem abgeschlossenen Vorgang. Bei einem Fehler gelten die Restbehandlung aus SKILL.md und die Wiederanlaufregeln unten; die Dateiform ändert weder Rechte noch Reservierung oder Sicherung.
 
 Bereite ein Schreibpaket außerhalb des Markers anhand der gelesenen Inhalte vor. Weicht der unter neuer Reservierung gelesene betroffene Stand inzwischen ab und verlangt der Abgleich weitere Modellarbeit, ändere noch nichts, gib frei und bereite die Ergänzung auf diesem aktuellen Stand neu vor. Gib nach einem bereits teilweise ausgeführten Paket nur nach der Konsistenzregel unten frei. Ein unerwartet blockierter weiterer Werkzeugaufruf wird zuerst beendet beziehungsweise geklärt; eine noch laufende Operation erlaubt keine vorzeitige Freigabe.
 
@@ -145,33 +147,94 @@ Bei reinem Lesefehler oder Stop wegen Deaktivierung beziehungsweise fehlendem Be
 
 ### Windows: Schreibpaket und Wiederanlauf
 
-Verwende für Schreiben denselben unveränderten Erwerb bis einschließlich erfolgreicher Beschriftung und Schließen des Streams aus der Abrufvorlage. Der Schreibaufruf erhält einen eigenen Fehlerabschluss: Freigabe ist erst nach festgestellter Konsistenz erlaubt, auch wenn die Ergebnissicherung noch offen gemeldet werden muss. Ein unbedingtes `finally` aus dem Leseabruf darf einen begonnenen Teilumbau nicht freigeben. Bereite dafür vor dem Aufruf Inhalt, erwartete Ausgangstexte, vollständige Zielmenge und nötige Sicherungsschritte vor; keine noch auszufüllenden Codeplatzhalter ausführen.
+Die folgende Hülle ist eine Vorlage für normale Fortschreibung; Lebenszykluspakete behalten ihre eigenen Zustandsprüfungen. Bereite Inhalte, absolute Zielpfade und diese vier kurzlebigen Scriptblöcke vor dem Erwerb vollständig vor. Sie sind keine installierten Funktionen oder neuen Gedächtnisfelder. Führe keine leeren oder noch auszufüllenden Paketabschnitte aus.
 
-| Abschnitt im selben Aufruf | Verbindliches Ergebnis |
+| Vorbereiteter Scriptblock | Aufgabe |
 | --- | --- |
-| Erwerb und Vorprüfung | Eigener beschrifteter Marker; heutiger Bestand und Regeln entsprechen dem vorbereiteten Ausgang. Bei Abweichung vor jeder Inhaltsänderung freigeben und neu vorbereiten. |
-| Vorhersicherung | Erforderlicher aktueller Stand nach backup.md vollständig geprüft gesichert. |
-| Änderung | Markerart und Eigentum unmittelbar vor Schreibschritten prüfen; vorbereitete Verzeichnisse vor ihren Dateien anlegen. |
-| Prüfung und Sicherung | Vollständige erwartete Pfad-/Inhaltsmenge, Kennzeichnungen, Regeln und Quellenzugänge prüfen; Ergebnis sichern; zulässige Bereinigung und technische Schlussprüfung abschließen. |
-| Abschluss | Konsistenz ausdrücklich feststellen; dann Eigentum erneut prüfen und nur den eigenen Marker entfernen. Bei ungeklärtem Teilumbau Marker und Wiederanlaufinformation erhalten. |
+| `memoryCheckBase` | Alle betroffenen Ausgangsdateien unter der Reservierung genau abgleichen; bei Abweichung abbrechen, bevor etwas ersetzt wird. Erforderliche Vorhersicherung nach backup.md vollständig prüfen. |
+| `memoryApplyChanges` | Vorbereitete Änderungen mit UTF-8 schreiben; vor mehreren Schreibschritten jeweils `& $memoryAssertOwner` aufrufen. Neue Dateien exklusiv anlegen, Verzeichnisse vor ihren Dateien. |
+| `memoryCheckResult` | Tatsächlich gespeicherte vollständige Zielmenge, Kennzeichnungen, Indexbeziehungen und betroffene Quellenzugänge prüfen. Bei ungeklärtem Ergebnis einen Fehler auslösen. |
+| `memorySaveResult` | Den geprüften neuen Gesamtstand nach backup.md sichern und den technischen Abschluss erledigen. Keine weiteren aktiven Gedächtnisinhalte ändern; nach Sicherungsfehler keine Archivbereinigung. |
 
-Der folgende kleine Schreibbaustein ersetzt keine Reservierung oder Sicherung. Er gehört in den Änderungsabschnitt, verwendet bereits vorbereitete absolute Zielpfade und schreibt UTF-8 ohne BOM. `memoryExpectedText` ist der zuletzt reserviert gelesene genaue Ausgangstext; bei einer ausdrücklich vorbereiteten Neuanlage wird stattdessen die Nichtexistenz geprüft und exklusiv neu angelegt. Regeln nicht durch einen großzügigeren Mustervergleich nachträglich passend machen.
+Die Hülle hält den ursprünglichen Token bereits nach erfolgreichem Erwerb im Ausführungsbeleg fest. Vor der ersten Änderung darf sie bei einem Fehler freigeben; nach Beginn der Änderung erst nach erfolgreicher Ergebnisprüfung. Ein Sicherungsfehler nach dieser Prüfung lässt den konsistenten, aber ungesicherten Stand bestehen und wird als Fehler ausgegeben. Ein fehlender oder fremder Marker erlaubt in keinem Zweig eine Freigabe.
 
 ```powershell
-$memoryAttributes = [IO.File]::GetAttributes($memoryLockPath)
-if (($memoryAttributes -band $memoryInvalidAttributes) -ne 0 -or
-    (Get-Content -LiteralPath $memoryLockPath -Encoding UTF8 -TotalCount 1) -cne "owner_token: $memoryOwnerToken") {
-    throw 'Reservierung vor dem Schreiben nicht mehr eindeutig eigen.'
+$ErrorActionPreference = 'Stop'
+$memoryProjectRoot = (Get-Location).ProviderPath
+$memoryLockPath = Join-Path $memoryProjectRoot '.project-memory.lock'
+$memoryRoot = Join-Path $memoryProjectRoot 'project-memory'
+$memoryOwnerToken = [guid]::NewGuid().ToString('D')
+$memoryInvalidAttributes = [IO.FileAttributes]::Directory -bor [IO.FileAttributes]::ReparsePoint -bor [IO.FileAttributes]::Device
+foreach ($memorySection in @($memoryCheckBase, $memoryApplyChanges, $memoryCheckResult, $memorySaveResult)) {
+    if ($memorySection -isnot [scriptblock] -or [string]::IsNullOrWhiteSpace($memorySection.ToString())) {
+        throw 'Alle vier Paketabschnitte müssen vollständig vorbereitet sein.'
+    }
 }
-if ([IO.File]::ReadAllText($memoryTargetPath, [Text.Encoding]::UTF8) -cne $memoryExpectedText) {
-    throw 'Ausgangsdatei verändert; das vorbereitete Paket nicht anwenden.'
+$memoryAssertOwner = {
+    if (([IO.File]::GetAttributes($memoryLockPath) -band $memoryInvalidAttributes) -ne 0 -or
+        (Get-Content -LiteralPath $memoryLockPath -Encoding UTF8 -TotalCount 1) -cne "owner_token: $memoryOwnerToken") {
+        throw 'Reservierung nicht mehr eindeutig eigen; Vorgang anhalten.'
+    }
 }
-[IO.File]::WriteAllText($memoryTargetPath, $memoryPreparedText, [Text.UTF8Encoding]::new($false))
+$memoryStream = $null
+$memoryLabelled = $false
+$memoryChangesStarted = $false
+$memoryConsistent = $false
+try {
+    for ($memoryAttempt = 0; $memoryAttempt -le 6; $memoryAttempt++) {
+        try {
+            if (([IO.File]::GetAttributes($memoryLockPath) -band $memoryInvalidAttributes) -ne 0) {
+                throw 'Der Reservierungsmarker ist keine reguläre Datei.'
+            }
+        } catch [IO.FileNotFoundException] { }
+        try {
+            $memoryStream = [IO.File]::Open($memoryLockPath, [IO.FileMode]::CreateNew,
+                [IO.FileAccess]::Write, [IO.FileShare]::None)
+            break
+        } catch [IO.IOException] {
+            if (($_.Exception.HResult -band 65535) -notin @(80, 183)) { throw }
+            if ($memoryAttempt -eq 6) { throw 'Die Gedächtnisreservierung bleibt belegt.' }
+            Start-Sleep -Seconds 5
+        }
+    }
+    $memoryPayload = "owner_token: $memoryOwnerToken`ncreated_at: $([DateTime]::UtcNow.ToString('o'))`npurpose: $memoryPurpose`n"
+    $memoryBytes = [Text.Encoding]::UTF8.GetBytes($memoryPayload)
+    $memoryStream.Write($memoryBytes, 0, $memoryBytes.Length)
+    $memoryStream.Flush()
+    $memoryLabelled = $true
+    $memoryStream.Dispose()
+    Write-Output "Reservierung erworben: $memoryLockPath; owner_token: $memoryOwnerToken"
+
+    & $memoryAssertOwner
+    if ((Test-Path -LiteralPath (Join-Path $memoryRoot 'README.md')) -or
+        -not (Test-Path -LiteralPath (Join-Path $memoryRoot 'PROFILE.md') -PathType Leaf) -or
+        -not (Test-Path -LiteralPath (Join-Path $memoryRoot 'INDEX.md') -PathType Leaf)) {
+        throw 'Kein regulär nutzbarer Bestand; keine Fortschreibung oder Ersatzanlage.'
+    }
+    & $memoryCheckBase
+    & $memoryAssertOwner
+    $memoryChangesStarted = $true
+    & $memoryApplyChanges
+    & $memoryCheckResult
+    $memoryConsistent = $true
+    & $memoryAssertOwner
+    & $memorySaveResult
+} finally {
+    if ($null -ne $memoryStream) {
+        $memoryStream.Dispose()
+        if ($memoryLabelled -and (-not $memoryChangesStarted -or $memoryConsistent)) {
+            & $memoryAssertOwner
+            Remove-Item -LiteralPath $memoryLockPath
+        } else {
+            Write-Warning "Ungeklärter Abbruch: $memoryLockPath; ursprünglicher owner_token: $memoryOwnerToken. Vor Wiederanlauf den Teilstand klären."
+        }
+    }
+}
 ```
 
-Vor der ersten Änderung sind alle betroffenen Ausgangsdateien abzugleichen, nicht erst jeweils kurz vor ihrem späteren Schreiben. Der einzelne Baustein schützt keinen schon begonnenen Mehrdateiumbau vor einem zu spät entdeckten Konflikt. Bei Wiederanlauf werden vorheriger Erwerb, Markerart und Eigentum sowie sämtliche schon geänderten und noch ausstehenden Dateien erneut zugeordnet. Der Abschluss verwendet dieselbe exakte Eigentümerprüfung und einzelne `Remove-Item -LiteralPath`-Operation wie die Abrufvorlage; kein neues verkürztes Freigabeverfahren.
+Setze `memoryPurpose` vor dem Aufruf auf den kurzen konkreten Anlass. Alle Paketabschnitte werfen bei einem fehlgeschlagenen externen Aufruf ebenfalls einen Fehler; insbesondere Git-Exitcodes ausdrücklich prüfen. Ein bloß erfolgreich gestarteter Prozess oder die Ausgabe „geprüft“ genügt nicht. Der Originalfehler bleibt sichtbar, auch wenn die eigene Reservierung kontrolliert freigegeben wird. Scheitert die Eigentümerprüfung, bleibt der vor dem Paket ausgegebene ursprüngliche Erwerbsnachweis maßgeblich.
 
-Ein Fehlerabschluss gibt den absoluten Markerpfad und den im erfolgreichen Erwerb erzeugten `memoryOwnerToken` aus, bevor der Aufruf endet, beispielsweise mit `Write-Warning "Blockierter Abbruch: $memoryLockPath; owner_token: $memoryOwnerToken"`. Dadurch bleibt der eigene Nachweis für die Fortsetzung verfügbar. Ist diese frühere Kennung nicht mehr verlässlich bekannt, darf der heutige Dateiinhalt sie nicht als nachträglichen Eigentumsnachweis ersetzen; der Vorgang bleibt bis zur konkreten Klärung blockiert.
+Beim Wiederanlauf im tatsächlichen Eigentümerchat gilt weiterhin „Abschluss, Fehler und Abbruch“: denselben absoluten Markerpfad und den **beim ursprünglichen Erwerb belegten** Token verwenden, alle erreichten Teiländerungen und Sicherungen neu abgleichen und erst nach geklärter Konsistenz abschließen. Einen bestehenden Marker nicht mit der Erwerbsschleife umgehen oder seine heutige Kennung als Eigentumsnachweis übernehmen. Ein pending-Ziel bleibt bis zur vollständigen Prüfung ungeprüft.
 
 ### macOS mit vorhandener `/bin/sh`
 
