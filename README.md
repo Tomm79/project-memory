@@ -1,21 +1,41 @@
-# Projektgedächtnis für Codex-Projekte mit lokalem Arbeitsordner
+# Projektgedächtnis für lokale Projekte in der ChatGPT-App (Work/Codex)
 
-*Für Menschen, die mit Codex im Dialog über längere Zeit zusammenhängende Texte, Vorlagen, Konzepte oder Software entwickeln und für die nächste Aufgabe frühere Überlegungen wieder brauchen – weil der **aktuelle Arbeitsstand allein die Vorgeschichte oft nicht mehr erklärt**.*
+Für Menschen, die mit ChatGPT im Dialog über längere Zeit zusammenhängende Texte, Vorlagen, Konzepte oder Software entwickeln. Auf dem Weg kommen sie immer wieder an den Punkt, an dem sie Zusammenhänge und frühere Überlegungen aus dem Dialog brauchen, weil der **aktuelle Arbeitsstand allein die Vorgeschichte nicht mehr hinreichend erklärt**.
 
-Erschließt und pflegt wichtige Originalstellen in Gesprächen und Dokumenten, damit spätere Chats auf dem entstandenen Projektwissen aufbauen können. Besonders sinnvoll für länger laufende Ausarbeitungen und Projekte, in denen eine gemeinsame Grundlage entwickelt, wiederholt angewendet und weiter verbessert wird.
+Das Projektgedächtnis erschließt und pflegt wichtige Originalstellen in Gesprächen und Dokumenten, damit spätere Chats auf dem entstandenen Projektwissen aufbauen können. Besonders sinnvoll für länger laufende Ausarbeitungen und Projekte, in denen eine gemeinsame Grundlage entwickelt, wiederholt angewendet und weiter verbessert wird.
+
+Der Skill ist für Projekte gedacht, die mit der ChatGPT-Desktop-App im Work- oder Codex-Modus in einem dauerhaft verfügbaren lokalen Projektordner bearbeitet werden. ChatGPT muss auf die Projektdateien und die benötigten Originalquellen zugreifen können. Zusätzliche Hilfsprogramme oder Datenbanken sind nicht erforderlich. Die weiteren Voraussetzungen und Modellempfehlungen stehen unten.
 
 > [!TIP]
 > **Schnellstart: Installation und Einrichtung**
 >
-> Den Skill einmal installieren, anschließend das Gedächtnis im gewünschten Projekt einrichten:
+> **Modell wählen:** Für Einrichtung, laufende Nutzung und Pflege ist **GPT-6.1 Sol mit Denkaufwand `high`** empfohlen. GPT-6 Luna mit `high` ist noch in Erprobung; eine Mindestkonfiguration ist noch nicht freigegeben.
 >
-> **1. Installieren.** Diese Anweisung in einem lokalen Codex-Chat der ChatGPT-App senden, in dem `skill-installer` verfügbar ist:
+> Den Skill einmal installieren, anschließend das Gedächtnis im gewünschten Projekt einrichten. Verwende jeweils den Befehl für deinen Modus:
+>
+> **1. Installieren.** Den passenden Befehl in einem lokalen Chat der ChatGPT-App senden, in dem `skill-installer` verfügbar ist.
+>
+> **Work:**
+>
+> ```text
+> @skill-installer install https://github.com/Tomm79/project-memory/tree/main/project-memory
+> ```
+>
+> **Codex:**
 >
 > ```text
 > $skill-installer install https://github.com/Tomm79/project-memory/tree/main/project-memory
 > ```
 >
-> **2. Im Projekt einrichten.** Nach erfolgreicher Installation das gewünschte Codex-Projekt mit lokalem Arbeitsordner öffnen und dort diese Anweisung senden:
+> **2. Im Projekt einrichten.** Nach erfolgreicher Installation das gewünschte Projekt mit lokalem Arbeitsordner öffnen und dort den passenden Befehl senden.
+>
+> **Work:**
+>
+> ```text
+> @project-memory Richte das Projektgedächtnis im aktuellen Projekt-Arbeitsordner ein.
+> ```
+>
+> **Codex:**
 >
 > ```text
 > $project-memory Richte das Projektgedächtnis im aktuellen Projekt-Arbeitsordner ein.
@@ -29,7 +49,7 @@ Der Skill richtet das Gedächtnis auf ausdrücklichen Auftrag ein und regelt ans
 
 Das Gedächtnis gehört zum jeweiligen Projekt. Ein für mehrere Projekte verfügbarer Skill führt deren Inhalte nicht zusammen. Der Bestand liegt im Arbeitsordner unter `project-memory/`; die Projektanweisungen binden den Skill ein. Normale Dateiwerkzeuge und gegebenenfalls lokales Git genügen. Der Skill installiert keine Software.
 
-Der technische Skillname ist `project-memory`; mit diesem Namen wird der Skill installiert und aufgerufen. Der Anzeigename in Codex ist „Projektgedächtnis für Projekte im Dialog – mit lokalem Arbeitsordner“.
+Der technische Skillname ist `project-memory`; mit diesem Namen wird der Skill installiert und aufgerufen. Der Anzeigename in der App ist „Projektgedächtnis für Projekte im Dialog – mit lokalem Arbeitsordner“.
 
 ## Voraussetzungen und Einsatzbereich
 
@@ -37,18 +57,16 @@ Für den Betrieb gelten folgende Voraussetzungen und Empfehlungen:
 
 | Bereich | Voraussetzung oder Empfehlung |
 | --- | --- |
-| App | Empfohlen ist eine aktuelle Version der ChatGPT-Desktop-App mit Codex und Unterstützung für [lokale Skills](https://learn.chatgpt.com/docs/build-skills). Für die beschriebene Installation muss `skill-installer` verfügbar sein. |
-| Projekt | Ein [lokales Codex-Projekt](https://learn.chatgpt.com/docs/projects) mit dauerhaft verfügbarem Arbeitsordner. |
-| Zugriffsrechte | Codex muss die Projektdateien lesen und bearbeiten, gewöhnliche lokale Dateioperationen ausführen und die Projektanweisungen in `AGENTS.md` verwenden können. |
-| Betriebssystem | Windows ist praktisch erprobt. Die macOS-Erprobung steht noch aus. |
-| Modell und Denkaufwand | **Empfohlen und praktisch erprobt: GPT-6.1 Sol mit Denkaufwand `high`.** |
+| App | Eine aktuelle Version der ChatGPT-Desktop-App mit Work oder Codex und Unterstützung für [lokale Skills](https://learn.chatgpt.com/docs/build-skills). Für die beschriebene Installation muss `skill-installer` verfügbar sein. |
+| Projekt | Ein [lokales Projekt](https://learn.chatgpt.com/docs/projects) mit dauerhaft verfügbarem Arbeitsordner, in dem du Work oder Codex nutzt. |
+| Zugriffsrechte | ChatGPT muss die Projektdateien lesen und bearbeiten, gewöhnliche lokale Dateioperationen ausführen und die Projektanweisungen in `AGENTS.md` verwenden können. |
+| Betriebssystem | Windows mit lokalem Work und Codex ist praktisch erprobt. Die macOS-Erprobung steht noch aus. |
+| Modell und Denkaufwand | **Empfohlen und praktisch erprobt: GPT-6.1 Sol mit Denkaufwand `high`.** GPT-6 Luna mit `high` ist noch in Erprobung. Die Empfehlung gilt für Einrichtung, laufende Nutzung und Pflege. |
 | Git – optional | Ohne Git im Arbeitsordner werden Kopiensicherungen verwendet. Ist der Arbeitsordner bereits mit Git versioniert, muss Git für lokale Sicherungscommits nutzbar sein. [Details zur Git-Nutzung](#git-im-projekt-arbeitsordner). |
-| Originalquellen | Dokumente und frühere Chats müssen für Codex erreichbar sein. Der Skill nutzt vorhandene Chatzugänge; bei fehlendem Zugang kann ein begrenzter Originalauszug die benötigte Stelle erhalten. |
+| Originalquellen | Dokumente und frühere Chats müssen im jeweiligen Projektchat erreichbar sein. Der Skill nutzt vorhandene Chatzugänge; bei fehlendem Zugang kann ein begrenzter Originalauszug die benötigte Stelle erhalten. |
 | Regelmäßiger Check – optional | Benötigt eine verfügbare Automatisierungsfunktion für einen eigenen lokalen Projektchat und deine Freigabe. Für [lokale automatische Läufe](https://learn.chatgpt.com/docs/automations?surface=app) müssen Rechner und App laufen. Die gewöhnliche Nutzung funktioniert auch ohne diesen Check. |
 
-GPT-6.1 Sol mit `high` ist die erprobte Empfehlung; ein technisches Modell-Minimum ist nicht festgelegt. GPT-6 Luna mit `medium` wird nach den bisherigen Vergleichstests für selbstständige Quellenkuratierung und Pflege nicht empfohlen.
-
-Für den normalen Betrieb sind keine zusätzlichen Hilfsprogramme oder Datenbanken erforderlich. Andere Agenten und Cloud-Arbeitsumgebungen gehören nicht zum derzeit entwickelten Einsatzbereich.
+Für den normalen Betrieb sind keine zusätzlichen Hilfsprogramme oder Datenbanken erforderlich. Der beschriebene Einsatzbereich ist die lokale Projektarbeit in Work oder Codex der ChatGPT-Desktop-App. Andere Agentenanwendungen und Cloud-Arbeitsumgebungen gehören nicht dazu.
 
 ## Wofür eignet sich das Projektgedächtnis?
 
@@ -66,8 +84,6 @@ Besonders hilfreich ist das Verfahren, wenn ein Ergebnis über mehrere Chats ent
 
 Ein typischer Ablauf: Eine Vorlage wird im Dialog entwickelt, in zwei unterschiedlichen Fällen angewendet und danach in einem neuen Chat überarbeitet. Das Gedächtnis erschließt die ursprünglichen Gründe und die fallbezogenen Abweichungen. Der neue Chat kann dadurch prüfen, welche Erkenntnis zur allgemeinen Vorlage gehört und welche Besonderheit nur für einen Einzelfall gilt.
 
-Die Beispiele zeigen, für welche Arbeitsmuster der Skill gedacht ist. Die bisherigen Praxisprüfungen betreffen vor allem Essayarbeit und Quellenabruf; die weiteren Anwendungsfälle sind noch zu erproben.
-
 ## Wie erschließt das Projektgedächtnis den Zusammenhang hinter den Ergebnissen?
 
 Entscheidungsjournale, Konzepte und Bewertungen halten fachliche Inhalte und häufig auch ihre Begründungen fest. Diese Dokumente können selbst die maßgeblichen Quellen sein. Das Projektgedächtnis erschließt die für eine spätere Aufgabe wichtigen Stellen darin; eine zusätzliche ausführliche Kopie der Bewertung oder des Konzepts ist dafür nicht nötig.
@@ -84,11 +100,21 @@ Wichtige Originalquellen müssen tatsächlich erreichbar sein. Der Skill nutzt v
 
 ## Installation und erste Einrichtung
 
-Die Installation macht den Skill für lokale Codex-Chats verfügbar. Erst ein weiterer Auftrag richtet das Gedächtnis in einem bestimmten Projekt ein. Eine Installation allein verändert keine Projekt-Arbeitsordner und führt keine Projektinhalte zusammen.
+**Modell für Einrichtung, laufende Nutzung und Pflege:** Empfohlen ist **GPT-6.1 Sol mit Denkaufwand `high`**. GPT-6 Luna mit `high` ist noch in Erprobung; eine Mindestkonfiguration ist noch nicht freigegeben. Wähle das Modell vor dem ersten Auftrag und beachte die Empfehlung auch in späteren Projektchats und Pflegeaufträgen.
+
+Die Installation macht den Skill für lokale Projektchats in der ChatGPT-Desktop-App verfügbar; seine Nutzung ist in Work und Codex erprobt. Erst ein weiterer Auftrag richtet das Gedächtnis in einem bestimmten Projekt ein. Eine Installation allein verändert keine Projekt-Arbeitsordner und führt keine Projektinhalte zusammen.
 
 ### 1. Skill installieren
 
-Verwende einen lokalen Codex-Chat in der ChatGPT-App, in dem `skill-installer` verfügbar ist. Sende diese Anweisung:
+Öffne einen lokalen Chat in der ChatGPT-App, in dem `skill-installer` verfügbar ist. Sende den Installationsbefehl für deinen Modus:
+
+**Work:**
+
+```text
+@skill-installer install https://github.com/Tomm79/project-memory/tree/main/project-memory
+```
+
+**Codex:**
 
 ```text
 $skill-installer install https://github.com/Tomm79/project-memory/tree/main/project-memory
@@ -98,7 +124,15 @@ Der Auftrag installiert den aktuellen Stand aus dem Branch `main`. Nach erfolgre
 
 ### 2. Gedächtnis im Zielprojekt einrichten
 
-Öffne das gewünschte Codex-Projekt mit seinem Arbeitsordner. Beauftrage dort die Einrichtung:
+Öffne das gewünschte Projekt mit seinem lokalen Arbeitsordner in Work oder Codex. Sende den Einrichtungsbefehl für deinen Modus:
+
+**Work:**
+
+```text
+@project-memory Richte das Projektgedächtnis im aktuellen Projekt-Arbeitsordner ein.
+```
+
+**Codex:**
 
 ```text
 $project-memory Richte das Projektgedächtnis im aktuellen Projekt-Arbeitsordner ein.
@@ -106,11 +140,11 @@ $project-memory Richte das Projektgedächtnis im aktuellen Projekt-Arbeitsordner
 
 Der Skill richtet den Gedächtnisordner und die passende Sicherung ein und ergänzt die Projektanweisungen in `AGENTS.md`. Bestehende Anweisungen bleiben erhalten; ein vorhandenes, eindeutig zugeordnetes Gedächtnis wird weiterverwendet. Bei der Sicherung durch Kopien wird die Aufbewahrungsregel erklärt und zur Freigabe vorgelegt.
 
-Nach erfolgreicher Einrichtung gelten die Gedächtnisregeln auch in weiteren Chats des Projekts. Vor Änderungen an den Projektregeln müssen andere laufende Chats abgeschlossen oder ihre Gedächtniszugriffe geklärt sein. Bei gewöhnlicher Projektarbeit musst du `$project-memory` anschließend nicht jedes Mal ausdrücklich nennen.
+Nach erfolgreicher Einrichtung gelten die Gedächtnisregeln auch in weiteren Chats des Projekts. Vor Änderungen an den Projektregeln müssen andere laufende Chats abgeschlossen oder ihre Gedächtniszugriffe geklärt sein. Bei gewöhnlicher Projektarbeit musst du den Skill anschließend nicht jedes Mal ausdrücklich auswählen oder nennen.
 
 ## Nutzung und Pflege
 
-Codex hält kurze Einträge mit Hinweisen auf wichtige Gesprächs- und Dokumentstellen aktuell und greift bei späteren Aufgaben auf diese Quellen zurück. Dafür ist keine zusätzliche vollständige Belegablage nötig. Ist ein Originalchat nicht erreichbar, kann ein begrenzter Originalauszug die benötigte Stelle erhalten.
+Mit dem Skill hält ChatGPT kurze Einträge mit Hinweisen auf wichtige Gesprächs- und Dokumentstellen aktuell und greift bei späteren Aufgaben auf diese Quellen zurück. Dafür ist keine zusätzliche vollständige Belegablage nötig. Ist ein Originalchat nicht erreichbar, kann ein begrenzter Originalauszug die benötigte Stelle erhalten.
 
 Laufende Inhaltspflege gehört zur normalen Arbeit: Einträge und Index verbessern, Doppelungen beheben und Fundstellen prüfen. Änderungen an Funktion, vereinbartem Aufbau oder Regeln werden dagegen erklärt und erst im konkret freigegebenen Umfang umgesetzt.
 
@@ -161,7 +195,7 @@ project-root/
 
 Das äußere Repository versioniert die dafür vorgesehenen Arbeitsdateien und Projektanweisungen. Das innere Repository sichert ausschließlich den zugehörigen Gedächtnisbestand. Ein Gedächtnis-Commit enthält deshalb keine außerhalb liegenden Arbeitsdateien oder Originalchats. Beide Geschichten können unabhängig voneinander nachvollzogen und wiederhergestellt werden.
 
-Codex sichert zusammengehörige Gedächtnisänderungen und erhält vor dem Ersetzen oder Neuordnen von Inhalten den bisherigen Stand. Die Sicherung der übrigen Arbeitsdateien folgt dem vereinbarten Projektverfahren. Einzelheiten beschreibt die [Sicherungsanleitung](project-memory/references/backup.md).
+ChatGPT sichert nach den Skillregeln zusammengehörige Gedächtnisänderungen und erhält vor dem Ersetzen oder Neuordnen von Inhalten den bisherigen Stand. Die Sicherung der übrigen Arbeitsdateien folgt dem vereinbarten Projektverfahren. Einzelheiten beschreibt die [Sicherungsanleitung](project-memory/references/backup.md).
 
 Git bewahrt die Versionsgeschichte des Gedächtnisses. Frühere Stände können bei Bedarf ausdrücklich wiederhergestellt werden.
 
